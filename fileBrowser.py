@@ -15,7 +15,7 @@ class MyFileBrowser(main.Ui_MainWindow, QtWidgets.QMainWindow):
         self.populate()
 
     def populate(self):
-        path = r"C:"
+        path = r"E:"
         self.model = QtWidgets.QFileSystemModel()
         self.model.setRootPath((QtCore.QDir.rootPath()))
         self.treeView.setModel(self.model)
@@ -26,7 +26,10 @@ class MyFileBrowser(main.Ui_MainWindow, QtWidgets.QMainWindow):
         menu = QtWidgets.QMenu()
         open = menu.addAction("Open")
         open.triggered.connect(self.open_file)
-
+        delete = menu.addAction("Delete")
+        delete.triggered.connect(self.delete_file)
+        new = menu.addAction("New File")
+        new.triggered.connect(self.new_file)
         cursor = QtGui.QCursor()
         menu.exec_(cursor.pos())
 
@@ -34,6 +37,17 @@ class MyFileBrowser(main.Ui_MainWindow, QtWidgets.QMainWindow):
         index = self.treeView.currentIndex()
         file_path = self.model.filePath(index)
         os.startfile(file_path)
+
+    def delete_file(self):
+        index = self.treeView.currentIndex()
+        file_path = self.model.filePath(index)
+        os.remove(file_path)
+
+    def new_file(self):
+        index = self.treeView.currentIndex()
+        file_path = self.model.filePath(index)
+        f = open(file_path + "/newFile.txt", 'a')
+        f.close()
 
 
 if __name__ == '__main__':
